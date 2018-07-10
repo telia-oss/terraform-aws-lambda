@@ -42,18 +42,6 @@ variable "variables" {
   }
 }
 
-variable "subnet_ids" {
-  description = "A list of subnet IDs associated with the Lambda function."
-  type        = "list"
-  default     = []
-}
-
-variable "security_group_ids" {
-  description = "A list of security group IDs associated with the Lambda function."
-  type        = "list"
-  default     = []
-}
-
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = "map"

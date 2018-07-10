@@ -12,11 +12,6 @@ resource "aws_lambda_function" "main" {
   timeout          = "${var.timeout}"
   role             = "${aws_iam_role.main.arn}"
 
-  vpc_config {
-    subnet_ids         = ["${var.subnet_ids}"]
-    security_group_ids = ["${var.security_group_ids}"]
-  }
-
   environment {
     variables = "${var.variables}"
   }
