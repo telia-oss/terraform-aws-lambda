@@ -14,7 +14,7 @@ resource "aws_lambda_function" "main" {
   role             = "${aws_iam_role.main.arn}"
 
   environment {
-    variables = "${var.variables}"
+    variables = "${var.environment}"
   }
 
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
@@ -38,7 +38,7 @@ resource "aws_lambda_function" "vpc" {
   }
 
   environment {
-    variables = "${var.variables}"
+    variables = "${var.environment}"
   }
 
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"

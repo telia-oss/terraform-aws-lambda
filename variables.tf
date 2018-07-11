@@ -48,8 +48,8 @@ variable "attach_vpc_config" {
   default     = "false"
 }
 
-variable "variables" {
-  description = "Map of environment variables."
+variable "environment" {
+  description = "A map that defines environment variables for the Lambda function."
   type        = "map"
 
   default = {

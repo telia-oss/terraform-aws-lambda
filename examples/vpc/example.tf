@@ -22,7 +22,7 @@ module "lambda" {
   subnet_ids        = ["${data.aws_subnet_ids.main.ids}"]
   attach_vpc_config = "true"
 
-  variables {
+  environment {
     TEST = "TEST VALUE"
   }
 

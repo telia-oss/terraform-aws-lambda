@@ -11,7 +11,7 @@ module "lambda" {
   runtime     = "python3.6"
   handler     = "example.handler"
 
-  variables {
+  environment {
     TEST = "TEST VALUE"
   }
 
