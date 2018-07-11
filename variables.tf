@@ -33,6 +33,21 @@ variable "timeout" {
   default     = 300
 }
 
+variable "vpc_id" {
+  description = "The VPC ID."
+  default     = ""
+}
+
+variable "subnet_ids" {
+  description = "A list of subnet IDs associated with the Lambda function."
+  default     = []
+}
+
+variable "attach_vpc_config" {
+  description = "Set to true in order to set the vpc config using the following variables: subnet_ids and security_group_ids."
+  default     = "false"
+}
+
 variable "variables" {
   description = "Map of environment variables."
   type        = "map"
