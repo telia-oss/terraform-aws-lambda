@@ -2,21 +2,18 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-data "aws_vpc" "main" {
-  default = true
-}
-
-data "aws_subnet_ids" "main" {
-  vpc_id = "${data.aws_vpc.main.id}"
-}
-
 module "lambda" {
   source = "../../"
 
   name_prefix = "example"
-  filename    = "example.zip"
+  filename    = "${path.module}/../example.zip"
   policy      = "${data.aws_iam_policy_document.lambda.json}"
-  runtime     = "go1.x"
+  runtime     = "python3.6"
+  handler     = "example.handler"
+
+  environment {
+    TEST = "TEST VALUE"
+  }
 
   tags {
     environment = "prod"
