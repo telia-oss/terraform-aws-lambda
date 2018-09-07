@@ -11,9 +11,9 @@ output "name" {
   value       = "${var.name_prefix}"
 }
 
-output "role_name" {
+output "role_id" {
   description = "The name of the execution role."
-  value       = "${aws_iam_role.main.name}"
+  value       = "${aws_iam_role.main.id}"
 }
 
 output "role_arn" {
