@@ -12,7 +12,7 @@ output "name" {
 }
 
 output "role_id" {
-  description = "The name of the execution role."
+  description = "The id of the execution role."
   value       = "${aws_iam_role.main.id}"
 }
 
