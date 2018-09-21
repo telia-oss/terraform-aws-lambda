@@ -64,9 +64,9 @@ variable "tags" {
   default     = {}
 }
 
-variable "s3_config" {
-  description = "Set to true in order to set s3 as source of the lambda: lambda_s3_bucket and s3_key."
-  default     = "false"
+variable "s3_object_version" {
+  description = "SThe object version containing the function's deployment package. Conflicts with filename."
+  default     = ""
 }
 
 variable "s3_bucket" {

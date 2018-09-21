@@ -2,9 +2,9 @@
 # Resources
 # ------------------------------------------------------------------------------
 resource "aws_lambda_function" "main" {
-  count            = "${var.attach_vpc_config == "false" && var.s3_config == "false" ? 1 : 0}"
+  count            = "${var.attach_vpc_config == "false" && var.s3_bucket == "" ? 1 : 0}"
   function_name    = "${var.name_prefix}"
-  description      = "Terraformed Lambda function."
+  description      = "Terraformed Lambda function. f1"
   filename         = "${var.filename}"
   handler          = "${var.handler}"
   source_code_hash = "${base64sha256(file(var.filename))}"
@@ -21,9 +21,9 @@ resource "aws_lambda_function" "main" {
 }
 
 resource "aws_lambda_function" "vpc" {
-  count            = "${var.attach_vpc_config == "true" && var.s3_config == "false" ? 1 : 0}"
+  count            = "${var.attach_vpc_config == "true" && var.s3_bucket == "" ? 1 : 0}"
   function_name    = "${var.name_prefix}"
-  description      = "Terraformed Lambda function."
+  description      = "Terraformed Lambda function. f2"
   filename         = "${var.filename}"
   handler          = "${var.handler}"
   source_code_hash = "${base64sha256(file(var.filename))}"
@@ -45,16 +45,17 @@ resource "aws_lambda_function" "vpc" {
 }
 
 resource "aws_lambda_function" "main_s3" {
-  count         = "${var.attach_vpc_config == "false" && var.s3_config == "true" ? 1 : 0}"
-  function_name = "${var.name_prefix}"
-  description   = "Terraformed Lambda function."
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "${var.s3_key}"
-  handler       = "${var.handler}"
-  runtime       = "${var.runtime}"
-  memory_size   = "${var.memory_size}"
-  timeout       = "${var.timeout}"
-  role          = "${aws_iam_role.main.arn}"
+  count             = "${var.attach_vpc_config == "false" && var.s3_bucket != "" ? 1 : 0}"
+  function_name     = "${var.name_prefix}"
+  description       = "Terraformed Lambda function. s1"
+  s3_bucket         = "${var.s3_bucket}"
+  s3_key            = "${var.s3_key}"
+  s3_object_version = "${var.s3_object_version}"
+  handler           = "${var.handler}"
+  runtime           = "${var.runtime}"
+  memory_size       = "${var.memory_size}"
+  timeout           = "${var.timeout}"
+  role              = "${aws_iam_role.main.arn}"
 
   environment {
     variables = "${var.environment}"
@@ -64,16 +65,17 @@ resource "aws_lambda_function" "main_s3" {
 }
 
 resource "aws_lambda_function" "vpc_s3" {
-  count         = "${var.attach_vpc_config == "true" && var.s3_config == "true"  ? 1 : 0}"
-  function_name = "${var.name_prefix}"
-  description   = "Terraformed Lambda function."
-  s3_bucket     = "${var.s3_bucket}"
-  s3_key        = "${var.s3_key}"
-  handler       = "${var.handler}"
-  runtime       = "${var.runtime}"
-  memory_size   = "${var.memory_size}"
-  timeout       = "${var.timeout}"
-  role          = "${aws_iam_role.main.arn}"
+  count             = "${var.attach_vpc_config == "true" && var.s3_bucket != ""  ? 1 : 0}"
+  function_name     = "${var.name_prefix}"
+  description       = "Terraformed Lambda function. s2"
+  s3_bucket         = "${var.s3_bucket}"
+  s3_key            = "${var.s3_key}"
+  s3_object_version = "${var.s3_object_version}"
+  handler           = "${var.handler}"
+  runtime           = "${var.runtime}"
+  memory_size       = "${var.memory_size}"
+  timeout           = "${var.timeout}"
+  role              = "${aws_iam_role.main.arn}"
 
   vpc_config {
     subnet_ids         = ["${var.subnet_ids}"]

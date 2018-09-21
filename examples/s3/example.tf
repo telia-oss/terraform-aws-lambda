@@ -10,19 +10,62 @@ data "aws_subnet_ids" "main" {
   vpc_id = "${data.aws_vpc.main.id}"
 }
 
-module "lambda" {
-  source = "../../../"
+# Basic example which creates a Lambda function from s3 bucket in the default VPC.
+module "lambda_vpc" {
+  source = "../../"
 
   name_prefix       = "example-vpc"
   s3_bucket         = "s3-bucket-name"
   s3_key            = "path-to-function"
-  policy            = "${data.aws_iam_policy_document.lambda.json}"
+  policy            = "${data.aws_iam_policy_document.lambda_vpc.json}"
   runtime           = "python3.6"
   handler           = "example.handler"
   vpc_id            = "${data.aws_vpc.main.id}"
   subnet_ids        = ["${data.aws_subnet_ids.main.ids}"]
   attach_vpc_config = "true"
-  s3_config         = "true"
+
+  environment {
+    TEST = "TEST VALUE"
+  }
+
+  tags {
+    environment = "prod"
+    terraform   = "True"
+  }
+}
+
+data "aws_iam_policy_document" "lambda_vpc" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+      "ec2:CreateNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+}
+
+output "lambda_vpc_arn" {
+  value = "${module.lambda_vpc.arn}"
+}
+
+module "lambda" {
+  source = "../../"
+
+  name_prefix = "example"
+  s3_bucket   = "s3-bucket-name"
+  s3_key      = "path-to-function"
+  policy      = "${data.aws_iam_policy_document.lambda.json}"
+  runtime     = "python3.6"
+  handler     = "example.handler"
 
   environment {
     TEST = "TEST VALUE"
@@ -42,9 +85,6 @@ data "aws_iam_policy_document" "lambda" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
-      "ec2:CreateNetworkInterface",
-      "ec2:DeleteNetworkInterface",
-      "ec2:DescribeNetworkInterfaces",
     ]
 
     resources = [
