@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 output "arn" {
   description = "The Amazon Resource Name (ARN) identifying your Lambda Function."
-  value       = "${element(concat(aws_lambda_function.main.*.arn, aws_lambda_function.vpc.*.arn), 0)}"
+  value       = "${element(concat(aws_lambda_function.main.*.arn, aws_lambda_function.vpc.*.arn, aws_lambda_function.main_s3.*.arn, aws_lambda_function.vpc_s3.*.arn,), 0)}"
 }
 
 output "name" {
