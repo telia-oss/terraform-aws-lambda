@@ -15,11 +15,11 @@ module "lambda_vpc" {
   source = "../../"
 
   name_prefix       = "example-vpc"
-  s3_bucket         = "s3-bucket-name"
-  s3_key            = "path-to-function"
+  s3_bucket         = "telia-oss"
+  s3_key            = "hello-world/helloworld.zip"
   policy            = "${data.aws_iam_policy_document.lambda_vpc.json}"
   runtime           = "python3.6"
-  handler           = "example.handler"
+  handler           = "helloworld.handler"
   vpc_id            = "${data.aws_vpc.main.id}"
   subnet_ids        = ["${data.aws_subnet_ids.main.ids}"]
   attach_vpc_config = "true"
@@ -61,11 +61,11 @@ module "lambda" {
   source = "../../"
 
   name_prefix = "example"
-  s3_bucket   = "s3-bucket-name"
-  s3_key      = "path-to-function"
+  s3_bucket   = "telia-oss"
+  s3_key      = "hello-world/helloworld.zip"
   policy      = "${data.aws_iam_policy_document.lambda.json}"
   runtime     = "python3.6"
-  handler     = "example.handler"
+  handler     = "helloworld.handler"
 
   environment {
     TEST = "TEST VALUE"
