@@ -7,6 +7,7 @@ variable "name_prefix" {
 
 variable "filename" {
   description = "The path to the function's deployment package within the local filesystem."
+  default     = ""
 }
 
 variable "policy" {
@@ -61,4 +62,19 @@ variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = "map"
   default     = {}
+}
+
+variable "s3_object_version" {
+  description = "SThe object version containing the function's deployment package. Conflicts with filename."
+  default     = ""
+}
+
+variable "s3_bucket" {
+  description = "The bucket where the lambda function is uploaded."
+  default     = ""
+}
+
+variable "s3_key" {
+  description = "The s3 key for the Lambda artifact."
+  default     = ""
 }
