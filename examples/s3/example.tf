@@ -63,7 +63,6 @@ module "lambda" {
   name_prefix = "example"
   s3_bucket   = "telia-oss"
   s3_key      = "hello-world/helloworld.zip"
-  policy      = "${data.aws_iam_policy_document.lambda.json}"
   runtime     = "python3.6"
   handler     = "helloworld.handler"
 
@@ -74,22 +73,6 @@ module "lambda" {
   tags {
     environment = "prod"
     terraform   = "True"
-  }
-}
-
-data "aws_iam_policy_document" "lambda" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "*",
-    ]
   }
 }
 

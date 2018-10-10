@@ -7,7 +7,6 @@ module "lambda" {
 
   name_prefix = "example"
   filename    = "${path.module}/../example.zip"
-  policy      = "${data.aws_iam_policy_document.lambda.json}"
   runtime     = "python3.6"
   handler     = "example.handler"
 
@@ -18,22 +17,6 @@ module "lambda" {
   tags {
     environment = "prod"
     terraform   = "True"
-  }
-}
-
-data "aws_iam_policy_document" "lambda" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-
-    resources = [
-      "*",
-    ]
   }
 }
 
