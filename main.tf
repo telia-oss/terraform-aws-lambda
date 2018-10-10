@@ -2,7 +2,7 @@
 # Resources
 # ------------------------------------------------------------------------------
 resource "aws_lambda_function" "main" {
-  count            = "${var.attach_vpc_config == "false" && var.s3_bucket == "" ? 1 : 0}"
+  count            = "${var.attach_vpc_config == "false" && var.filename != "" ? 1 : 0}"
   function_name    = "${var.name_prefix}"
   description      = "Terraformed Lambda function."
   filename         = "${var.filename}"
@@ -21,7 +21,7 @@ resource "aws_lambda_function" "main" {
 }
 
 resource "aws_lambda_function" "vpc" {
-  count            = "${var.attach_vpc_config == "true" && var.s3_bucket == "" ? 1 : 0}"
+  count            = "${var.attach_vpc_config == "true" && var.filename != "" ? 1 : 0}"
   function_name    = "${var.name_prefix}"
   description      = "Terraformed Lambda function."
   filename         = "${var.filename}"
@@ -45,7 +45,7 @@ resource "aws_lambda_function" "vpc" {
 }
 
 resource "aws_lambda_function" "main_s3" {
-  count             = "${var.attach_vpc_config == "false" && var.s3_bucket != "" ? 1 : 0}"
+  count             = "${var.attach_vpc_config == "false" && var.filename == "" ? 1 : 0}"
   function_name     = "${var.name_prefix}"
   description       = "Terraformed Lambda function."
   s3_bucket         = "${var.s3_bucket}"
@@ -65,7 +65,7 @@ resource "aws_lambda_function" "main_s3" {
 }
 
 resource "aws_lambda_function" "vpc_s3" {
-  count             = "${var.attach_vpc_config == "true" && var.s3_bucket != ""  ? 1 : 0}"
+  count             = "${var.attach_vpc_config == "true" && var.filename == ""  ? 1 : 0}"
   function_name     = "${var.name_prefix}"
   description       = "Terraformed Lambda function."
   s3_bucket         = "${var.s3_bucket}"
