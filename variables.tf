@@ -11,8 +11,8 @@ variable "filename" {
 }
 
 variable "policy" {
-  description = "A policy document for the lambda execution role. Defaults to AWSLambdaBasicExecutionRole"
-  default     = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  description = "A json policy document for the lambda execution role. Defaults to same as AWSLambdaBasicExecutionRole"
+  default     = ""
 }
 
 variable "runtime" {

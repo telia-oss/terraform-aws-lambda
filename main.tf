@@ -115,8 +115,22 @@ data "aws_iam_policy_document" "assume" {
   }
 }
 
+data "aws_iam_policy_document" "default_lambda" {
+  "statement" {
+    effect = "Allow"
+
+    actions = [
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+
+    resources = ["*"]
+  }
+}
+
 resource "aws_iam_role_policy" "main" {
   name   = "${var.name_prefix}-lambda-privileges"
   role   = "${aws_iam_role.main.name}"
-  policy = "${var.policy}"
+  policy = "${var.policy == "" ? data.aws_iam_policy_document.default_lambda.json : var.policy}"
 }
