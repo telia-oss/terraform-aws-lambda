@@ -65,7 +65,7 @@ variable "tags" {
 }
 
 variable "s3_object_version" {
-  description = "SThe object version containing the function's deployment package. Conflicts with filename."
+  description = "The object version containing the function's deployment package. Conflicts with filename."
   default     = ""
 }
 
