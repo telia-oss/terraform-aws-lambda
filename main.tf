@@ -51,7 +51,6 @@ resource "aws_lambda_function" "main_s3" {
   s3_bucket         = "${var.s3_bucket}"
   s3_key            = "${var.s3_key}"
   s3_object_version = "${var.s3_object_version}"
-  source_code_hash = "${base64sha256(file(var.s3_key))}"
   handler           = "${var.handler}"
   runtime           = "${var.runtime}"
   memory_size       = "${var.memory_size}"
