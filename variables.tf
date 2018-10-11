@@ -64,9 +64,9 @@ variable "tags" {
   default     = {}
 }
 
-variable "s3_object_version" {
-  description = "SThe object version containing the function's deployment package. Conflicts with filename."
-  default     = ""
+variable "s3_trigger_updates" {
+  description = "Trigger updates to lamda if S3 content has changed"
+  default     = "true"
 }
 
 variable "s3_bucket" {
@@ -78,3 +78,4 @@ variable "s3_key" {
   description = "The s3 key for the Lambda artifact."
   default     = ""
 }
+
