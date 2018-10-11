@@ -78,4 +78,3 @@ variable "s3_key" {
   description = "The s3 key for the Lambda artifact."
   default     = ""
 }
-
