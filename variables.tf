@@ -40,6 +40,7 @@ variable "vpc_id" {
 }
 
 variable "subnet_ids" {
+  type        = "list"
   description = "A list of subnet IDs associated with the Lambda function."
   default     = []
 }
@@ -66,7 +67,12 @@ variable "tags" {
 
 variable "s3_trigger_updates" {
   description = "Trigger updates to lamda if S3 content has changed"
-  default     = "true"
+  default = "true"
+}
+
+variable "s3_object_version" {
+  description = "The object version containing the function's deployment package. Conflicts with filename."
+  default     = ""
 }
 
 variable "s3_bucket" {
