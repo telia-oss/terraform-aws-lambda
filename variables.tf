@@ -67,7 +67,7 @@ variable "tags" {
 
 variable "s3_trigger_updates" {
   description = "Trigger updates to lamda if S3 content has changed"
-  default = "true"
+  default     = "true"
 }
 
 variable "s3_object_version" {
