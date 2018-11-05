@@ -23,5 +23,5 @@ output "role_arn" {
 
 output "security_group_id" {
   description = "The ID of the security group."
-  value       = "${aws_security_group.vpc.*.id}"
+  value       = "${element(concat(aws_security_group.vpc.*.id, list("")), 0)}"
 }
