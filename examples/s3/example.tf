@@ -15,11 +15,11 @@ module "lambda_vpc" {
   source = "../../"
 
   name_prefix       = "example-vpc"
-  s3_bucket         = "telia-oss"
-  s3_key            = "hello-world/helloworld.zip"
+  s3_bucket         = "telia-no-channelapi-artifacts"
+  s3_key            = "user-offer/095ec5cd3a46b613123e799de120a11ddf20c56d.zip"
   policy            = "${data.aws_iam_policy_document.lambda_vpc.json}"
-  runtime           = "python3.6"
-  handler           = "helloworld.handler"
+  runtime           = "go1.x"
+  handler           = "main"
   vpc_id            = "${data.aws_vpc.main.id}"
   subnet_ids        = ["${data.aws_subnet_ids.main.ids}"]
   attach_vpc_config = "true"
@@ -57,15 +57,19 @@ output "lambda_vpc_arn" {
   value = "${module.lambda_vpc.arn}"
 }
 
+output "lambda_vpc_security_group_id" {
+  value = "${module.lambda_vpc.security_group_id}"
+}
+
 module "lambda" {
   source = "../../"
 
-  name_prefix = "example"
-  s3_bucket   = "telia-oss"
-  s3_key      = "hello-world/helloworld.zip"
-  policy      = "${data.aws_iam_policy_document.lambda.json}"
-  runtime     = "python3.6"
-  handler     = "helloworld.handler"
+ name_prefix       = "example-vpc"
+  s3_bucket         = "telia-no-channelapi-artifacts"
+  s3_key            = "user-offer/095ec5cd3a46b613123e799de120a11ddf20c56d.zip"
+  policy            = "${data.aws_iam_policy_document.lambda_vpc.json}"
+  runtime           = "go1.x"
+  handler           = "main"
 
   environment {
     TEST = "TEST VALUE"
@@ -77,6 +81,9 @@ module "lambda" {
   }
 }
 
+output "lambda_security_group_id" {
+  value = "${module.lambda.security_group_id}"
+}
 data "aws_iam_policy_document" "lambda" {
   statement {
     effect = "Allow"
@@ -95,4 +102,8 @@ data "aws_iam_policy_document" "lambda" {
 
 output "lambda_arn" {
   value = "${module.lambda.arn}"
+}
+
+output "lambda_invoke_arn" {
+  value = "${module.lambda.invoke_arn}"
 }
