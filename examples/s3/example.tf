@@ -64,12 +64,12 @@ output "lambda_vpc_security_group_id" {
 module "lambda" {
   source = "../../"
 
-  name_prefix       = "example-vpc"
-  s3_bucket         = "telia-oss"
-  s3_key            = "hello-world/helloworld.zip"
-  policy            = "${data.aws_iam_policy_document.lambda.json}"
-  runtime           = "python3.6"
-  handler           = "helloworld.handler"
+  name_prefix = "example-vpc"
+  s3_bucket   = "telia-oss"
+  s3_key      = "hello-world/helloworld.zip"
+  policy      = "${data.aws_iam_policy_document.lambda.json}"
+  runtime     = "python3.6"
+  handler     = "helloworld.handler"
 
   environment {
     TEST = "TEST VALUE"
@@ -84,6 +84,7 @@ module "lambda" {
 output "lambda_security_group_id" {
   value = "${module.lambda.security_group_id}"
 }
+
 data "aws_iam_policy_document" "lambda" {
   statement {
     effect = "Allow"
