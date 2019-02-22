@@ -57,10 +57,6 @@ output "lambda_vpc_arn" {
   value = "${module.lambda_vpc.arn}"
 }
 
-output "lambda_vpc_security_group_id" {
-  value = "${module.lambda_vpc.security_group_id}"
-}
-
 module "lambda" {
   source = "../../"
 
@@ -79,10 +75,6 @@ module "lambda" {
     environment = "prod"
     terraform   = "True"
   }
-}
-
-output "lambda_security_group_id" {
-  value = "${module.lambda.security_group_id}"
 }
 
 data "aws_iam_policy_document" "lambda" {
