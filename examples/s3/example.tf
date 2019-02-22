@@ -15,11 +15,11 @@ module "lambda_vpc" {
   source = "../../"
 
   name_prefix       = "example-vpc"
-  s3_bucket         = "telia-no-channelapi-artifacts"
-  s3_key            = "user-offer/095ec5cd3a46b613123e799de120a11ddf20c56d.zip"
+  s3_bucket         = "telia-oss"
+  s3_key            = "hello-world/helloworld.zip"
   policy            = "${data.aws_iam_policy_document.lambda_vpc.json}"
-  runtime           = "go1.x"
-  handler           = "main"
+  runtime           = "python3.6"
+  handler           = "helloworld.handler"
   vpc_id            = "${data.aws_vpc.main.id}"
   subnet_ids        = ["${data.aws_subnet_ids.main.ids}"]
   attach_vpc_config = "true"
@@ -64,12 +64,12 @@ output "lambda_vpc_security_group_id" {
 module "lambda" {
   source = "../../"
 
- name_prefix       = "example-vpc"
-  s3_bucket         = "telia-no-channelapi-artifacts"
-  s3_key            = "user-offer/095ec5cd3a46b613123e799de120a11ddf20c56d.zip"
-  policy            = "${data.aws_iam_policy_document.lambda_vpc.json}"
-  runtime           = "go1.x"
-  handler           = "main"
+  name_prefix       = "example-vpc"
+  s3_bucket         = "telia-oss"
+  s3_key            = "hello-world/helloworld.zip"
+  policy            = "${data.aws_iam_policy_document.lambda.json}"
+  runtime           = "python3.6"
+  handler           = "helloworld.handler"
 
   environment {
     TEST = "TEST VALUE"
