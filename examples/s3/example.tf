@@ -64,7 +64,7 @@ output "lambda_vpc_security_group_id" {
 module "lambda" {
   source = "../../"
 
-  name_prefix = "example-vpc"
+  name_prefix = "example"
   s3_bucket   = "telia-oss"
   s3_key      = "hello-world/helloworld.zip"
   policy      = "${data.aws_iam_policy_document.lambda.json}"
