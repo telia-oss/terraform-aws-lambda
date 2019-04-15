@@ -84,3 +84,8 @@ variable "s3_key" {
   description = "The s3 key for the Lambda artifact."
   default     = ""
 }
+
+variable "reserved_concurrent_executions" {
+  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1"
+  default     = -1
+}

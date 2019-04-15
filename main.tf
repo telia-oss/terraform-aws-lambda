@@ -2,16 +2,17 @@
 # Resources
 # ------------------------------------------------------------------------------
 resource "aws_lambda_function" "main" {
-  count            = "${var.attach_vpc_config == "false" && var.filename != "" ? 1 : 0}"
-  function_name    = "${var.name_prefix}"
-  description      = "Terraformed Lambda function."
-  filename         = "${var.filename}"
-  handler          = "${var.handler}"
-  source_code_hash = "${base64sha256(file(var.filename))}"
-  runtime          = "${var.runtime}"
-  memory_size      = "${var.memory_size}"
-  timeout          = "${var.timeout}"
-  role             = "${aws_iam_role.main.arn}"
+  count                          = "${var.attach_vpc_config == "false" && var.filename != "" ? 1 : 0}"
+  function_name                  = "${var.name_prefix}"
+  description                    = "Terraformed Lambda function."
+  filename                       = "${var.filename}"
+  handler                        = "${var.handler}"
+  source_code_hash               = "${base64sha256(file(var.filename))}"
+  runtime                        = "${var.runtime}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  role                           = "${aws_iam_role.main.arn}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
 
   environment {
     variables = "${var.environment}"
@@ -21,16 +22,17 @@ resource "aws_lambda_function" "main" {
 }
 
 resource "aws_lambda_function" "vpc" {
-  count            = "${var.attach_vpc_config == "true" && var.filename != "" ? 1 : 0}"
-  function_name    = "${var.name_prefix}"
-  description      = "Terraformed Lambda function."
-  filename         = "${var.filename}"
-  handler          = "${var.handler}"
-  source_code_hash = "${base64sha256(file(var.filename))}"
-  runtime          = "${var.runtime}"
-  memory_size      = "${var.memory_size}"
-  timeout          = "${var.timeout}"
-  role             = "${aws_iam_role.main.arn}"
+  count                          = "${var.attach_vpc_config == "true" && var.filename != "" ? 1 : 0}"
+  function_name                  = "${var.name_prefix}"
+  description                    = "Terraformed Lambda function."
+  filename                       = "${var.filename}"
+  handler                        = "${var.handler}"
+  source_code_hash               = "${base64sha256(file(var.filename))}"
+  runtime                        = "${var.runtime}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  role                           = "${aws_iam_role.main.arn}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
 
   vpc_config {
     subnet_ids         = ["${var.subnet_ids}"]
@@ -45,17 +47,18 @@ resource "aws_lambda_function" "vpc" {
 }
 
 resource "aws_lambda_function" "main_s3" {
-  count             = "${var.attach_vpc_config == "false" && var.filename == "" ? 1 : 0}"
-  function_name     = "${var.name_prefix}"
-  description       = "Terraformed Lambda function."
-  s3_bucket         = "${var.s3_bucket}"
-  s3_key            = "${var.s3_key}"
-  s3_object_version = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
-  handler           = "${var.handler}"
-  runtime           = "${var.runtime}"
-  memory_size       = "${var.memory_size}"
-  timeout           = "${var.timeout}"
-  role              = "${aws_iam_role.main.arn}"
+  count                          = "${var.attach_vpc_config == "false" && var.filename == "" ? 1 : 0}"
+  function_name                  = "${var.name_prefix}"
+  description                    = "Terraformed Lambda function."
+  s3_bucket                      = "${var.s3_bucket}"
+  s3_key                         = "${var.s3_key}"
+  s3_object_version              = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
+  handler                        = "${var.handler}"
+  runtime                        = "${var.runtime}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  role                           = "${aws_iam_role.main.arn}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
 
   environment {
     variables = "${var.environment}"
@@ -70,17 +73,18 @@ data "aws_s3_bucket_object" "main" {
 }
 
 resource "aws_lambda_function" "vpc_s3" {
-  count             = "${var.attach_vpc_config == "true" && var.filename == ""  ? 1 : 0}"
-  function_name     = "${var.name_prefix}"
-  description       = "Terraformed Lambda function."
-  s3_bucket         = "${var.s3_bucket}"
-  s3_key            = "${var.s3_key}"
-  s3_object_version = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
-  handler           = "${var.handler}"
-  runtime           = "${var.runtime}"
-  memory_size       = "${var.memory_size}"
-  timeout           = "${var.timeout}"
-  role              = "${aws_iam_role.main.arn}"
+  count                          = "${var.attach_vpc_config == "true" && var.filename == ""  ? 1 : 0}"
+  function_name                  = "${var.name_prefix}"
+  description                    = "Terraformed Lambda function."
+  s3_bucket                      = "${var.s3_bucket}"
+  s3_key                         = "${var.s3_key}"
+  s3_object_version              = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
+  handler                        = "${var.handler}"
+  runtime                        = "${var.runtime}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  role                           = "${aws_iam_role.main.arn}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
 
   vpc_config {
     subnet_ids         = ["${var.subnet_ids}"]
