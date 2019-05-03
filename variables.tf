@@ -90,6 +90,11 @@ variable "reserved_concurrent_executions" {
   default     = -1
 }
 
+variable "publish" {
+  description = "Whether to publish creation/change as new Lambda Function Version. Defaults to false."
+  default     = "false"
+}
+
 variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key."
   default     = ""
