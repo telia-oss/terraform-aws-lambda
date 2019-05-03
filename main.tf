@@ -59,6 +59,7 @@ resource "aws_lambda_function" "main_s3" {
   timeout                        = "${var.timeout}"
   role                           = "${aws_iam_role.main.arn}"
   reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
+  source_code_hash               = "${var.source_code_hash}"
 
   environment {
     variables = "${var.environment}"
@@ -85,6 +86,7 @@ resource "aws_lambda_function" "vpc_s3" {
   timeout                        = "${var.timeout}"
   role                           = "${aws_iam_role.main.arn}"
   reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
+  source_code_hash               = "${var.source_code_hash}"
 
   vpc_config {
     subnet_ids         = ["${var.subnet_ids}"]
