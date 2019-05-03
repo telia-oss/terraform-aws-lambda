@@ -23,7 +23,7 @@ resource "aws_lambda_function" "main" {
 }
 
 resource "aws_lambda_function" "vpc" {
-  count                          = "${var.attach_vpc_config == "true" && var.filename != "" ? 1 : 0}"
+  count                          = "${var.attach_vpc_config == "true" && var.filename != "" && var.source_code_hash == "" ? 1 : 0}"
   function_name                  = "${var.name_prefix}"
   description                    = "Terraformed Lambda function."
   filename                       = "${var.filename}"
@@ -49,7 +49,30 @@ resource "aws_lambda_function" "vpc" {
 }
 
 resource "aws_lambda_function" "main_s3" {
-  count                          = "${var.attach_vpc_config == "false" && var.filename == "" ? 1 : 0}"
+  count                          = "${var.attach_vpc_config == "false" && var.filename == "" && var.source_code_hash == "" ? 1 : 0}"
+  function_name                  = "${var.name_prefix}"
+  description                    = "Terraformed Lambda function."
+  s3_bucket                      = "${var.s3_bucket}"
+  s3_key                         = "${var.s3_key}"
+  s3_object_version              = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
+  handler                        = "${var.handler}"
+  runtime                        = "${var.runtime}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  role                           = "${aws_iam_role.main.arn}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
+  publish                        = "${var.publish}"
+  source_code_hash               = "${var.source_code_hash}"
+
+  environment {
+    variables = "${var.environment}"
+  }
+
+  tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
+}
+
+resource "aws_lambda_function" "main_s3_source_code_hash" {
+  count                          = "${var.attach_vpc_config == "false" && var.filename == "" && var.source_code_hash != "" ? 1 : 0}"
   function_name                  = "${var.name_prefix}"
   description                    = "Terraformed Lambda function."
   s3_bucket                      = "${var.s3_bucket}"
@@ -77,7 +100,34 @@ data "aws_s3_bucket_object" "main" {
 }
 
 resource "aws_lambda_function" "vpc_s3" {
-  count                          = "${var.attach_vpc_config == "true" && var.filename == ""  ? 1 : 0}"
+  count                          = "${var.attach_vpc_config == "true" && var.filename == "" && var.source_code_hash == "" ? 1 : 0}"
+  function_name                  = "${var.name_prefix}"
+  description                    = "Terraformed Lambda function."
+  s3_bucket                      = "${var.s3_bucket}"
+  s3_key                         = "${var.s3_key}"
+  s3_object_version              = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
+  handler                        = "${var.handler}"
+  runtime                        = "${var.runtime}"
+  memory_size                    = "${var.memory_size}"
+  timeout                        = "${var.timeout}"
+  role                           = "${aws_iam_role.main.arn}"
+  reserved_concurrent_executions = "${var.reserved_concurrent_executions}"
+  publish                        = "${var.publish}"
+
+  vpc_config {
+    subnet_ids         = ["${var.subnet_ids}"]
+    security_group_ids = ["${aws_security_group.vpc.*.id}"]
+  }
+
+  environment {
+    variables = "${var.environment}"
+  }
+
+  tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
+}
+
+resource "aws_lambda_function" "vpc_s3_source_code_hash" {
+  count                          = "${var.attach_vpc_config == "true" && var.filename == "" && var.source_code_hash != ""  ? 1 : 0}"
   function_name                  = "${var.name_prefix}"
   description                    = "Terraformed Lambda function."
   s3_bucket                      = "${var.s3_bucket}"
