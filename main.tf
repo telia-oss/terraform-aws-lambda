@@ -19,6 +19,10 @@ resource "aws_lambda_function" "main" {
     variables = "${var.environment}"
   }
 
+  tracing_config {
+    mode = "${var.tracing_mode}"
+  }
+
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
 }
 
@@ -45,6 +49,10 @@ resource "aws_lambda_function" "vpc" {
     variables = "${var.environment}"
   }
 
+  tracing_config {
+    mode = "${var.tracing_mode}"
+  }
+
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
 }
 
@@ -66,6 +74,10 @@ resource "aws_lambda_function" "main_s3" {
 
   environment {
     variables = "${var.environment}"
+  }
+
+  tracing_config {
+    mode = "${var.tracing_mode}"
   }
 
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
@@ -101,6 +113,10 @@ resource "aws_lambda_function" "vpc_s3" {
     variables = "${var.environment}"
   }
 
+  tracing_config {
+    mode = "${var.tracing_mode}"
+  }
+
   tags = "${merge(var.tags, map("Name", "${var.name_prefix}"))}"
 }
 
@@ -134,4 +150,29 @@ resource "aws_iam_role_policy" "main" {
   name   = "${var.name_prefix}-lambda-privileges"
   role   = "${aws_iam_role.main.name}"
   policy = "${var.policy}"
+}
+
+resource "aws_iam_policy" "tracing" {
+  name   = "${var.name_prefix}-lambda-tracing-privileges"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Action": [
+          "xray:PutTraceSegments",
+          "xray:PutTelemetryRecords"
+        ],
+        "Effect": "Allow",
+        "Resource": "*"
+      }
+    ]
+  }
+  EOF
+}
+
+resource "aws_iam_role_policy_attachment" "tracing" {
+  role       = "${aws_iam_role.main.name}"
+  policy_arn = "${aws_iam_policy.tracing.arn}"
 }

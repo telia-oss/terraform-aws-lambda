@@ -99,3 +99,8 @@ variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key."
   default     = ""
 }
+
+variable "tracing_mode" {
+  description = "The function's AWS X-Ray tracing configuration: Active | PassThrough. "
+  default     = "PassThrough"
+}
