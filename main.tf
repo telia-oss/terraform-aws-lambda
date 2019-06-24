@@ -37,7 +37,7 @@ resource "aws_lambda_function" "vpc" {
   publish                        = var.publish
 
   vpc_config {
-    subnet_ids         = [join(",", var.subnet_ids)]
+    subnet_ids         = var.subnet_ids
     security_group_ids = [aws_security_group.vpc.*.id]
   }
 
@@ -94,7 +94,7 @@ resource "aws_lambda_function" "vpc_s3" {
   source_code_hash               = var.source_code_hash
 
   vpc_config {
-    subnet_ids         = [join(",", var.subnet_ids)]
+    subnet_ids         = var.subnet_ids
     security_group_ids = [aws_security_group.vpc.*.id]
   }
 
