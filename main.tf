@@ -54,7 +54,7 @@ resource "aws_lambda_function" "main_s3" {
   description                    = "Terraformed Lambda function."
   s3_bucket                      = var.s3_bucket
   s3_key                         = var.s3_key
-  s3_object_version              = var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : ""
+  s3_object_version              = var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main[0].version_id : ""
   handler                        = var.handler
   runtime                        = var.runtime
   memory_size                    = var.memory_size
@@ -72,6 +72,7 @@ resource "aws_lambda_function" "main_s3" {
 }
 
 data "aws_s3_bucket_object" "main" {
+  count  = var.s3_trigger_updates ? 1: 0
   bucket = var.s3_bucket
   key    = var.s3_key
 }
@@ -82,7 +83,7 @@ resource "aws_lambda_function" "vpc_s3" {
   description                    = "Terraformed Lambda function."
   s3_bucket                      = var.s3_bucket
   s3_key                         = var.s3_key
-  s3_object_version              = var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : ""
+  s3_object_version              = var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main[0].version_id : ""
   handler                        = var.handler
   runtime                        = var.runtime
   memory_size                    = var.memory_size
