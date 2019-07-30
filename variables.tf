@@ -9,7 +9,7 @@ variable "name_prefix" {
 variable "filename" {
   description = "The path to the function's deployment package within the local filesystem."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "policy" {
@@ -80,19 +80,19 @@ variable "s3_trigger_updates" {
 variable "s3_object_version" {
   description = "The object version containing the function's deployment package. Conflicts with filename."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "s3_bucket" {
   description = "The bucket where the lambda function is uploaded."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "s3_key" {
   description = "The s3 key for the Lambda artifact."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "reserved_concurrent_executions" {

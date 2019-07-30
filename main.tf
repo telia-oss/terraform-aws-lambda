@@ -2,38 +2,14 @@
 # Resources
 # ------------------------------------------------------------------------------
 resource "aws_lambda_function" "main" {
-  count                          = var.attach_vpc_config == false && var.filename != "" ? 1 : 0
   function_name                  = var.name_prefix
   description                    = "Terraformed Lambda function."
   filename                       = var.filename
+  source_code_hash               = var.filename != null ? filebase64sha256(var.filename) : null
+  s3_bucket                      = var.s3_bucket
+  s3_key                         = var.s3_key
+  s3_object_version              = var.filename == null && var.s3_trigger_updates ? data.aws_s3_bucket_object.main[0].version_id : null
   handler                        = var.handler
-  source_code_hash               = filebase64sha256(var.filename)
-  runtime                        = var.runtime
-  memory_size                    = var.memory_size
-  timeout                        = var.timeout
-  role                           = aws_iam_role.main.arn
-  reserved_concurrent_executions = var.reserved_concurrent_executions
-  publish                        = var.publish
-
-  environment {
-    variables = var.environment
-  }
-
-  tags = merge(
-    var.tags,
-    {
-      "Name" = var.name_prefix
-    },
-  )
-}
-
-resource "aws_lambda_function" "vpc" {
-  count                          = var.attach_vpc_config == true && var.filename != "" ? 1 : 0
-  function_name                  = var.name_prefix
-  description                    = "Terraformed Lambda function."
-  filename                       = var.filename
-  handler                        = var.handler
-  source_code_hash               = filebase64sha256(var.filename)
   runtime                        = var.runtime
   memory_size                    = var.memory_size
   timeout                        = var.timeout
@@ -43,36 +19,8 @@ resource "aws_lambda_function" "vpc" {
 
   vpc_config {
     subnet_ids         = var.subnet_ids
-    security_group_ids = aws_security_group.vpc.*.id
+    security_group_ids = aws_security_group.vpc[*].id
   }
-
-  environment {
-    variables = var.environment
-  }
-
-  tags = merge(
-    var.tags,
-    {
-      "Name" = var.name_prefix
-    },
-  )
-}
-
-resource "aws_lambda_function" "main_s3" {
-  count                          = var.attach_vpc_config == false && var.filename == "" ? 1 : 0
-  function_name                  = var.name_prefix
-  description                    = "Terraformed Lambda function."
-  s3_bucket                      = var.s3_bucket
-  s3_key                         = var.s3_key
-  s3_object_version              = var.s3_trigger_updates ? data.aws_s3_bucket_object.main[0].version_id : ""
-  handler                        = var.handler
-  runtime                        = var.runtime
-  memory_size                    = var.memory_size
-  timeout                        = var.timeout
-  role                           = aws_iam_role.main.arn
-  reserved_concurrent_executions = var.reserved_concurrent_executions
-  publish                        = var.publish
-  source_code_hash               = var.source_code_hash
 
   environment {
     variables = var.environment
@@ -87,42 +35,9 @@ resource "aws_lambda_function" "main_s3" {
 }
 
 data "aws_s3_bucket_object" "main" {
-  count  = var.filename == "" ? 1 : 0
+  count  = var.filename == null ? 1 : 0
   bucket = var.s3_bucket
   key    = var.s3_key
-}
-
-resource "aws_lambda_function" "vpc_s3" {
-  count                          = var.attach_vpc_config == true && var.filename == "" ? 1 : 0
-  function_name                  = var.name_prefix
-  description                    = "Terraformed Lambda function."
-  s3_bucket                      = var.s3_bucket
-  s3_key                         = var.s3_key
-  s3_object_version              = var.s3_trigger_updates ? data.aws_s3_bucket_object.main[0].version_id : ""
-  handler                        = var.handler
-  runtime                        = var.runtime
-  memory_size                    = var.memory_size
-  timeout                        = var.timeout
-  role                           = aws_iam_role.main.arn
-  reserved_concurrent_executions = var.reserved_concurrent_executions
-  publish                        = var.publish
-  source_code_hash               = var.source_code_hash
-
-  vpc_config {
-    subnet_ids         = var.subnet_ids
-    security_group_ids = aws_security_group.vpc.*.id
-  }
-
-  environment {
-    variables = var.environment
-  }
-
-  tags = merge(
-    var.tags,
-    {
-      "Name" = var.name_prefix
-    },
-  )
 }
 
 resource "aws_security_group" "vpc" {
