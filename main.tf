@@ -40,7 +40,7 @@ resource "aws_security_group" "vpc" {
 resource "aws_iam_role" "main" {
   name               = "${var.name_prefix}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume.json
-  tags               = merge(var.tags, { "Name" = "${var.name_prefix}-lambda-role}" })
+  tags               = merge(var.tags, { "Name" = "${var.name_prefix}-lambda-role" })
 }
 
 data "aws_iam_policy_document" "assume" {
