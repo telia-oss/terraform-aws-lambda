@@ -26,12 +26,7 @@ resource "aws_lambda_function" "main" {
     variables = var.environment
   }
 
-  tags = merge(
-    var.tags,
-    {
-      "Name" = var.name_prefix
-    },
-  )
+  tags = merge(var.tags, { "Name" = var.name_prefix })
 }
 
 resource "aws_security_group" "vpc" {
@@ -39,18 +34,13 @@ resource "aws_security_group" "vpc" {
   name        = "${var.name_prefix}-sg"
   description = "Terraformed security group."
   vpc_id      = var.vpc_id
-
-  tags = merge(
-    var.tags,
-    {
-      "Name" = "${var.name_prefix}-sg"
-    },
-  )
+  tags        = merge(var.tags, { "Name" = "${var.name_prefix}-sg" })
 }
 
 resource "aws_iam_role" "main" {
   name               = "${var.name_prefix}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume.json
+  tags               = merge(var.tags, { "Name" = "${var.name_prefix}-lambda-role}" })
 }
 
 data "aws_iam_policy_document" "assume" {
