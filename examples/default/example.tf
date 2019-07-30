@@ -11,7 +11,7 @@ module "lambda" {
   source = "../../"
 
   name_prefix = "example"
-  filename    = "${abspath(path.module)}/../example.zip"
+  filename    = "${path.module}/../example.zip"
   policy      = data.aws_iam_policy_document.lambda.json
   runtime     = "python3.6"
   handler     = "example.handler"
