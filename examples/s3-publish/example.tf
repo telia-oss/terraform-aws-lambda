@@ -16,7 +16,7 @@ module "lambda" {
   policy      = data.aws_iam_policy_document.lambda.json
   runtime     = "python3.6"
   handler     = "helloworld.handler"
-  publish     = "true"
+  publish     = true
 
   environment = {
     TEST = "TEST VALUE"

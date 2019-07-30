@@ -2,7 +2,7 @@
 # Resources
 # ------------------------------------------------------------------------------
 resource "aws_lambda_function" "main" {
-  count                          = var.attach_vpc_config == "false" && var.filename != "" ? 1 : 0
+  count                          = var.attach_vpc_config == false && var.filename != "" ? 1 : 0
   function_name                  = var.name_prefix
   description                    = "Terraformed Lambda function."
   filename                       = var.filename
@@ -28,7 +28,7 @@ resource "aws_lambda_function" "main" {
 }
 
 resource "aws_lambda_function" "vpc" {
-  count                          = var.attach_vpc_config == "true" && var.filename != "" ? 1 : 0
+  count                          = var.attach_vpc_config == true && var.filename != "" ? 1 : 0
   function_name                  = var.name_prefix
   description                    = "Terraformed Lambda function."
   filename                       = var.filename
@@ -59,12 +59,12 @@ resource "aws_lambda_function" "vpc" {
 }
 
 resource "aws_lambda_function" "main_s3" {
-  count                          = var.attach_vpc_config == "false" && var.filename == "" ? 1 : 0
+  count                          = var.attach_vpc_config == false && var.filename == "" ? 1 : 0
   function_name                  = var.name_prefix
   description                    = "Terraformed Lambda function."
   s3_bucket                      = var.s3_bucket
   s3_key                         = var.s3_key
-  s3_object_version              = var.s3_trigger_updates == "true" ? data.aws_s3_bucket_object.main[0].version_id : ""
+  s3_object_version              = var.s3_trigger_updates ? data.aws_s3_bucket_object.main[0].version_id : ""
   handler                        = var.handler
   runtime                        = var.runtime
   memory_size                    = var.memory_size
@@ -93,12 +93,12 @@ data "aws_s3_bucket_object" "main" {
 }
 
 resource "aws_lambda_function" "vpc_s3" {
-  count                          = var.attach_vpc_config == "true" && var.filename == "" ? 1 : 0
+  count                          = var.attach_vpc_config == true && var.filename == "" ? 1 : 0
   function_name                  = var.name_prefix
   description                    = "Terraformed Lambda function."
   s3_bucket                      = var.s3_bucket
   s3_key                         = var.s3_key
-  s3_object_version              = var.s3_trigger_updates == "true" ? data.aws_s3_bucket_object.main[0].version_id : ""
+  s3_object_version              = var.s3_trigger_updates ? data.aws_s3_bucket_object.main[0].version_id : ""
   handler                        = var.handler
   runtime                        = var.runtime
   memory_size                    = var.memory_size
@@ -126,7 +126,7 @@ resource "aws_lambda_function" "vpc_s3" {
 }
 
 resource "aws_security_group" "vpc" {
-  count       = var.attach_vpc_config == "true" ? 1 : 0
+  count       = var.attach_vpc_config == true ? 1 : 0
   name        = "${var.name_prefix}-sg"
   description = "Terraformed security group."
   vpc_id      = var.vpc_id
