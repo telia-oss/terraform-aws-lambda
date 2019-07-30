@@ -18,13 +18,14 @@ data "aws_subnet_ids" "main" {
 module "lambda" {
   source = "../../"
 
-  name_prefix = "example-vpc"
-  filename    = "${path.module}/../example.zip"
-  policy      = data.aws_iam_policy_document.lambda.json
-  runtime     = "python3.6"
-  handler     = "example.handler"
-  vpc_id      = data.aws_vpc.main.id
-  subnet_ids  = data.aws_subnet_ids.main.ids
+  name_prefix      = "example-vpc"
+  filename         = "${path.module}/../example.zip"
+  source_code_hash = filebase64sha256("${path.module}/../example.zip")
+  policy           = data.aws_iam_policy_document.lambda.json
+  runtime          = "python3.6"
+  handler          = "example.handler"
+  vpc_id           = data.aws_vpc.main.id
+  subnet_ids       = data.aws_subnet_ids.main.ids
 
   environment = {
     TEST = "TEST VALUE"

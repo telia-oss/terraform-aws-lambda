@@ -38,7 +38,7 @@ variable "s3_object_version" {
 variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "runtime" {

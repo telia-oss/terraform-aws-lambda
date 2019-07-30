@@ -10,11 +10,12 @@ provider "aws" {
 module "lambda" {
   source = "../../"
 
-  name_prefix = "example"
-  filename    = "${path.module}/../example.zip"
-  policy      = data.aws_iam_policy_document.lambda.json
-  runtime     = "python3.6"
-  handler     = "example.handler"
+  name_prefix      = "example"
+  filename         = "${path.module}/../example.zip"
+  source_code_hash = filebase64sha256("${path.module}/../example.zip")
+  policy           = data.aws_iam_policy_document.lambda.json
+  runtime          = "python3.6"
+  handler          = "example.handler"
 
   environment = {
     TEST = "TEST VALUE"
