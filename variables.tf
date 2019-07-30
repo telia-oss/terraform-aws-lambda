@@ -6,15 +6,39 @@ variable "name_prefix" {
   type        = string
 }
 
+variable "policy" {
+  description = "A policy document for the lambda execution role."
+  type        = string
+}
+
 variable "filename" {
   description = "The path to the function's deployment package within the local filesystem."
   type        = string
   default     = null
 }
 
-variable "policy" {
-  description = "A policy document for the lambda execution role."
+variable "s3_bucket" {
+  description = "The bucket where the lambda function is uploaded."
   type        = string
+  default     = null
+}
+
+variable "s3_key" {
+  description = "The s3 key for the Lambda artifact."
+  type        = string
+  default     = null
+}
+
+variable "s3_object_version" {
+  description = "The object version containing the function's deployment package. Conflicts with filename."
+  type        = string
+  default     = null
+}
+
+variable "source_code_hash" {
+  description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key."
+  type        = string
+  default     = ""
 }
 
 variable "runtime" {
@@ -41,6 +65,12 @@ variable "timeout" {
   default     = 300
 }
 
+variable "reserved_concurrent_executions" {
+  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1"
+  type        = number
+  default     = -1
+}
+
 variable "vpc_id" {
   description = "The VPC ID."
   type        = string
@@ -59,45 +89,14 @@ variable "environment" {
   default     = {}
 }
 
-variable "tags" {
-  description = "A map of tags (key-value pairs) passed to resources."
-  type        = map(string)
-  default     = {}
-}
-
-variable "s3_object_version" {
-  description = "The object version containing the function's deployment package. Conflicts with filename."
-  type        = string
-  default     = null
-}
-
-variable "s3_bucket" {
-  description = "The bucket where the lambda function is uploaded."
-  type        = string
-  default     = null
-}
-
-variable "s3_key" {
-  description = "The s3 key for the Lambda artifact."
-  type        = string
-  default     = null
-}
-
-variable "reserved_concurrent_executions" {
-  description = "The amount of reserved concurrent executions for this lambda function. A value of 0 disables lambda from being triggered and -1 removes any concurrency limitations. Defaults to Unreserved Concurrency Limits -1"
-  type        = number
-  default     = -1
-}
-
 variable "publish" {
   description = "Whether to publish creation/change as new Lambda Function Version. Defaults to false."
   type        = bool
   default     = false
 }
 
-variable "source_code_hash" {
-  description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key."
-  type        = string
-  default     = ""
+variable "tags" {
+  description = "A map of tags (key-value pairs) passed to resources."
+  type        = map(string)
+  default     = {}
 }
-
