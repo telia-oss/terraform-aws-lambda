@@ -8,7 +8,7 @@ resource "aws_lambda_function" "main" {
   source_code_hash               = var.filename != null ? filebase64sha256(var.filename) : null
   s3_bucket                      = var.s3_bucket
   s3_key                         = var.s3_key
-  s3_object_version              = var.filename == null && var.s3_trigger_updates ? data.aws_s3_bucket_object.main[0].version_id : null
+  s3_object_version              = var.s3_bucket != null ? data.aws_s3_bucket_object.main[0].version_id : null
   handler                        = var.handler
   runtime                        = var.runtime
   memory_size                    = var.memory_size
@@ -35,13 +35,13 @@ resource "aws_lambda_function" "main" {
 }
 
 data "aws_s3_bucket_object" "main" {
-  count  = var.filename == null ? 1 : 0
+  count  = var.s3_bucket != null ? 1 : 0
   bucket = var.s3_bucket
   key    = var.s3_key
 }
 
 resource "aws_security_group" "vpc" {
-  count       = var.attach_vpc_config == true ? 1 : 0
+  count       = length(var.subnet_ids) > 0 ? 1 : 0
   name        = "${var.name_prefix}-sg"
   description = "Terraformed security group."
   vpc_id      = var.vpc_id

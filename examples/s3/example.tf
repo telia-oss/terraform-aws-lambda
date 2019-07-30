@@ -19,15 +19,14 @@ data "aws_subnet_ids" "main" {
 module "lambda_vpc" {
   source = "../../"
 
-  name_prefix       = "example-vpc"
-  s3_bucket         = "telia-oss"
-  s3_key            = "hello-world/helloworld.zip"
-  policy            = data.aws_iam_policy_document.lambda_vpc.json
-  runtime           = "python3.6"
-  handler           = "helloworld.handler"
-  vpc_id            = data.aws_vpc.main.id
-  subnet_ids        = data.aws_subnet_ids.main.ids
-  attach_vpc_config = true
+  name_prefix = "example-vpc"
+  s3_bucket   = "telia-oss"
+  s3_key      = "hello-world/helloworld.zip"
+  policy      = data.aws_iam_policy_document.lambda_vpc.json
+  runtime     = "python3.6"
+  handler     = "helloworld.handler"
+  vpc_id      = data.aws_vpc.main.id
+  subnet_ids  = data.aws_subnet_ids.main.ids
 
   environment = {
     TEST = "TEST VALUE"

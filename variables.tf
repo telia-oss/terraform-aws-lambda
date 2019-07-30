@@ -53,12 +53,6 @@ variable "subnet_ids" {
   default     = []
 }
 
-variable "attach_vpc_config" {
-  description = "Set to true in order to set the vpc config using the following variables: subnet_ids and security_group_ids."
-  type        = bool
-  default     = false
-}
-
 variable "environment" {
   description = "A map that defines environment variables for the Lambda function."
   type        = map(string)
@@ -69,12 +63,6 @@ variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = map(string)
   default     = {}
-}
-
-variable "s3_trigger_updates" {
-  description = "Trigger updates to lamda if S3 content has changed"
-  type        = bool
-  default     = true
 }
 
 variable "s3_object_version" {
