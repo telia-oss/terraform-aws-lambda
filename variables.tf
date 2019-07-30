@@ -40,7 +40,7 @@ variable "vpc_id" {
 }
 
 variable "subnet_ids" {
-  type        = "list"
+  type        = list(string)
   description = "A list of subnet IDs associated with the Lambda function."
   default     = []
 }
@@ -52,7 +52,7 @@ variable "attach_vpc_config" {
 
 variable "environment" {
   description = "A map that defines environment variables for the Lambda function."
-  type        = "map"
+  type        = map(string)
 
   default = {
     NA = "NA"
@@ -61,7 +61,7 @@ variable "environment" {
 
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
-  type        = "map"
+  type        = map(string)
   default     = {}
 }
 
@@ -99,3 +99,4 @@ variable "source_code_hash" {
   description = "Used to trigger updates. Must be set to a base64-encoded SHA256 hash of the package file specified with either filename or s3_key."
   default     = ""
 }
+
