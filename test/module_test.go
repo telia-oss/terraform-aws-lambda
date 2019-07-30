@@ -27,6 +27,15 @@ func TestDefaultExample(t *testing.T) {
 				CodeSha256: "G63tPMsN+RicnJfrn43RqldH6TEbTs6d7eYWO5jnMZw=",
 			},
 		},
+		{
+			description: "complete example",
+			directory:   "../examples/complete",
+			name:        fmt.Sprintf("lambda-complete-test-%s", random.UniqueId()),
+			region:      "eu-west-1",
+			expected: lambda.Expectations{
+				CodeSha256: "G63tPMsN+RicnJfrn43RqldH6TEbTs6d7eYWO5jnMZw=",
+			},
+		},
 	}
 
 	for _, tc := range tests {
