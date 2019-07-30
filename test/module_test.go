@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	lambda "github.com/telia-oss/terraform-aws-lambda/v3"
+	lambda "github.com/telia-oss/terraform-aws-lambda/v3/test"
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
@@ -23,7 +23,9 @@ func TestDefaultExample(t *testing.T) {
 			directory:   "../examples/basic",
 			name:        fmt.Sprintf("lambda-basic-test-%s", random.UniqueId()),
 			region:      "eu-west-1",
-			expected:    lambda.Expectations{},
+			expected: lambda.Expectations{
+				CodeSha256: "G63tPMsN+RicnJfrn43RqldH6TEbTs6d7eYWO5jnMZw=",
+			},
 		},
 	}
 
