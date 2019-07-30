@@ -7,3 +7,8 @@ variable "region" {
   type    = string
   default = "eu-west-1"
 }
+
+variable "lambda_print_string" {
+  type    = string
+  default = "Hello world!"
+}

@@ -17,6 +17,7 @@ func TestModule(t *testing.T) {
 		directory   string
 		name        string
 		region      string
+		print       string
 		expected    lambda.Expectations
 	}{
 		{
@@ -24,8 +25,9 @@ func TestModule(t *testing.T) {
 			directory:   "../examples/basic",
 			name:        fmt.Sprintf("lambda-basic-test-%s", random.UniqueId()),
 			region:      "eu-west-1",
+			print:       "hello basic example!",
 			expected: lambda.Expectations{
-				CodeSha256: "G63tPMsN+RicnJfrn43RqldH6TEbTs6d7eYWO5jnMZw=",
+				CodeSha256: "EdQ1V8ceGrd/mSgyi0bIopZ06RXVsiuquX4dkLixjPk=",
 			},
 		},
 		{
@@ -33,8 +35,9 @@ func TestModule(t *testing.T) {
 			directory:   "../examples/complete",
 			name:        fmt.Sprintf("lambda-complete-test-%s", random.UniqueId()),
 			region:      "eu-west-1",
+			print:       "hello complete example!",
 			expected: lambda.Expectations{
-				CodeSha256: "G63tPMsN+RicnJfrn43RqldH6TEbTs6d7eYWO5jnMZw=",
+				CodeSha256: "OjKCj/Z0Hxid5LoKN8TdPEd3WWXmqY7BOaR6RVwFkpI=",
 			},
 		},
 	}
@@ -43,6 +46,7 @@ func TestModule(t *testing.T) {
 		tc := tc // Source: https://gist.github.com/posener/92a55c4cd441fc5e5e85f27bca008721
 		t.Run(tc.description, func(t *testing.T) {
 			t.Parallel()
+
 			options := &terraform.Options{
 				TerraformDir: tc.directory,
 
@@ -58,6 +62,10 @@ func TestModule(t *testing.T) {
 			}
 
 			defer terraform.Destroy(t, options)
+			terraform.InitAndApply(t, options)
+
+			// Update the print value to trigger an update
+			options.Vars["lambda_print_string"] = tc.print
 			terraform.InitAndApply(t, options)
 
 			lambda.RunTestSuite(t,

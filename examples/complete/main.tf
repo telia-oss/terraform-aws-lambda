@@ -98,6 +98,6 @@ data "archive_file" "lambda" {
   source_content_filename = "lambda.py"
   source_content          = <<EOF
 def handler(event, context):
-    print("Hello world!")
+    print("${var.lambda_print_string}")
 EOF
 }
