@@ -54,7 +54,7 @@ resource "aws_lambda_function" "main_s3" {
   description                    = "Terraformed Lambda function."
   s3_bucket                      = "${var.s3_bucket}"
   s3_key                         = "${var.s3_key}"
-  s3_object_version              = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
+  s3_object_version              = "${var.s3_trigger_updates == "true" ? data.aws_s3_bucket_object.main.version_id : ""}"
   handler                        = "${var.handler}"
   runtime                        = "${var.runtime}"
   memory_size                    = "${var.memory_size}"
@@ -72,17 +72,18 @@ resource "aws_lambda_function" "main_s3" {
 }
 
 data "aws_s3_bucket_object" "main" {
+  count  = "${var.filename == "" ? 1 : 0}"
   bucket = "${var.s3_bucket}"
   key    = "${var.s3_key}"
 }
 
 resource "aws_lambda_function" "vpc_s3" {
-  count                          = "${var.attach_vpc_config == "true" && var.filename == ""  ? 1 : 0}"
+  count                          = "${var.attach_vpc_config == "true" && var.filename == "" ? 1 : 0}"
   function_name                  = "${var.name_prefix}"
   description                    = "Terraformed Lambda function."
   s3_bucket                      = "${var.s3_bucket}"
   s3_key                         = "${var.s3_key}"
-  s3_object_version              = "${var.s3_trigger_updates == true ? data.aws_s3_bucket_object.main.version_id : "" }"
+  s3_object_version              = "${var.s3_trigger_updates == "true" ? data.aws_s3_bucket_object.main.version_id : ""}"
   handler                        = "${var.handler}"
   runtime                        = "${var.runtime}"
   memory_size                    = "${var.memory_size}"
