@@ -36,7 +36,7 @@ resource "aws_s3_bucket_object" "lambda" {
   bucket = aws_s3_bucket.bucket.id
   key    = "lambda.zip"
   source = "${path.module}/lambda.zip"
-  etag   = "${filemd5("${path.module}/lambda.zip")}"
+  etag   = data.archive_file.lambda.output_md5
 }
 
 module "lambda" {
@@ -44,7 +44,7 @@ module "lambda" {
 
   name_prefix       = var.name_prefix
   s3_bucket         = aws_s3_bucket.bucket.id
-  s3_object         = aws_s3_bucket_object.lambda.id
+  s3_key            = aws_s3_bucket_object.lambda.id
   s3_object_version = aws_s3_bucket_object.lambda.version_id
   policy            = data.aws_iam_policy_document.lambda.json
   runtime           = "python3.6"
@@ -70,6 +70,20 @@ data "aws_iam_policy_document" "lambda" {
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "ec2:CreateNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
     ]
 
     resources = [

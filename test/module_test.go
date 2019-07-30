@@ -2,6 +2,7 @@ package module_test
 
 import (
 	"fmt"
+	"strings"
 	"testing"
 
 	lambda "github.com/telia-oss/terraform-aws-lambda/v3/test"
@@ -46,7 +47,8 @@ func TestDefaultExample(t *testing.T) {
 				TerraformDir: tc.directory,
 
 				Vars: map[string]interface{}{
-					"name_prefix": tc.name,
+					// aws_s3_bucket requires a lowercase name.
+					"name_prefix": strings.ToLower(tc.name),
 					"region":      tc.region,
 				},
 
