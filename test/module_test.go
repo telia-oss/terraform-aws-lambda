@@ -11,7 +11,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestDefaultExample(t *testing.T) {
+func TestModule(t *testing.T) {
 	tests := []struct {
 		description string
 		directory   string
