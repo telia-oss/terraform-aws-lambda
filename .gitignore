@@ -8,3 +8,6 @@ crash.log
 
 # Taskfile
 .task/
+
+# Zip files
+examples/**/lambda.zip
