@@ -1,6 +1,13 @@
 # Terraform
 **/.terraform
 **/*.tfstate*
-examples/**/lambda.zip
 crash.log
+
+# IntelliJ IDE
 .idea/
+
+# Taskfile
+.task/
+
+# Zip files
+examples/**/lambda.zip
