@@ -26,6 +26,8 @@ resource "aws_lambda_function" "main" {
     variables = var.environment
   }
 
+  layers = var.layers
+
   tags = merge(var.tags, { "Name" = var.name_prefix })
 }
 

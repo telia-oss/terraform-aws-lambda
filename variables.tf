@@ -95,6 +95,12 @@ variable "publish" {
   default     = false
 }
 
+variable "layers" {
+  description = "A list of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function."
+  type        = list(string)
+  default     = []
+}
+
 variable "tags" {
   description = "A map of tags (key-value pairs) passed to resources."
   type        = map(string)
