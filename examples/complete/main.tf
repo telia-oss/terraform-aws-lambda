@@ -18,7 +18,7 @@ data "aws_subnet_ids" "main" {
 
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.name_prefix
-  #region        = var.region
+  #region        = var.region  ##Not needed anymore follows defaults to provider region
   acl           = "private"
   force_destroy = true
 
