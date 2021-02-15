@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 0.12"
+  required_version = ">= 0.14"
 }
 
 provider "aws" {
-  version = ">= 2.17"
-  region  = var.region
+  #version = ">= 3.0"  ##This is moved to the required providers block on TF 0.14
+  region = var.region
 }
 
 data "aws_vpc" "main" {
@@ -18,7 +18,7 @@ data "aws_subnet_ids" "main" {
 
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.name_prefix
-  region        = var.region
+  #region        = var.region  ##Not needed anymore follows defaults to provider region
   acl           = "private"
   force_destroy = true
 
