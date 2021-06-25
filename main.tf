@@ -52,7 +52,7 @@ data "aws_iam_policy_document" "assume" {
 
     principals {
       type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
+      identifiers = ["edgelambda.amazonaws.com", "lambda.amazonaws.com"]
     }
   }
 }
