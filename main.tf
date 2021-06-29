@@ -22,8 +22,11 @@ resource "aws_lambda_function" "main" {
     security_group_ids = aws_security_group.vpc[*].id
   }
 
-  environment {
-    variables = var.environment
+  dynamic "environment" {
+    for_each = length(var.environment) > 0 ? [1] : []
+    content {
+      variables = var.environment
+    }
   }
 
   layers = var.layers
