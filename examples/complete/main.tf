@@ -6,20 +6,17 @@ data "aws_vpc" "main" {
   default = true
 }
 
-data "aws_subnet_ids" "main" {
-  vpc_id = data.aws_vpc.main.id
+data "aws_subnets" "main" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.main.id]
+  }
 }
 
 
 resource "aws_s3_bucket" "bucket" {
   bucket_prefix = var.name_prefix
-  #region        = var.region  ##Not needed anymore follows defaults to provider region
-  acl           = "private"
   force_destroy = true
-
-  versioning {
-    enabled = true
-  }
 
   tags = {
     environment = "dev"
@@ -27,7 +24,20 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
-resource "aws_s3_bucket_object" "lambda" {
+resource "aws_s3_bucket_acl" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+  acl    = "private"
+}
+
+resource "aws_s3_bucket_versioning" "bucket" {
+  bucket = aws_s3_bucket.bucket.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_object" "lambda" {
   bucket = aws_s3_bucket.bucket.id
   key    = "lambda.zip"
   source = "${path.module}/lambda.zip"
@@ -39,13 +49,13 @@ module "lambda" {
 
   name_prefix       = var.name_prefix
   s3_bucket         = aws_s3_bucket.bucket.id
-  s3_key            = aws_s3_bucket_object.lambda.id
-  s3_object_version = aws_s3_bucket_object.lambda.version_id
+  s3_key            = aws_s3_object.lambda.id
+  s3_object_version = aws_s3_object.lambda.version_id
   policy            = data.aws_iam_policy_document.lambda.json
   runtime           = "python3.9"
   handler           = "lambda.handler"
   vpc_id            = data.aws_vpc.main.id
-  subnet_ids        = data.aws_subnet_ids.main.ids
+  subnet_ids        = data.aws_subnets.main.ids
 
   environment = {
     TEST = "TEST VALUE"
