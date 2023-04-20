@@ -10,7 +10,7 @@ module "lambda" {
   filename         = "${path.module}/lambda.zip"
   source_code_hash = data.archive_file.lambda.output_base64sha256
   policy           = data.aws_iam_policy_document.lambda.json
-  runtime          = "python3.6"
+  runtime          = "python3.9"
   handler          = "lambda.handler"
 
   environment = {

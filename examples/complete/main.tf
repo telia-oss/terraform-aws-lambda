@@ -42,7 +42,7 @@ module "lambda" {
   s3_key            = aws_s3_bucket_object.lambda.id
   s3_object_version = aws_s3_bucket_object.lambda.version_id
   policy            = data.aws_iam_policy_document.lambda.json
-  runtime           = "python3.6"
+  runtime           = "python3.9"
   handler           = "lambda.handler"
   vpc_id            = data.aws_vpc.main.id
   subnet_ids        = data.aws_subnet_ids.main.ids
