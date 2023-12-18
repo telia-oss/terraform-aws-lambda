@@ -7,5 +7,5 @@ require (
 	github.com/gruntwork-io/terratest v0.18.1
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/stretchr/testify v1.5.1
-	golang.org/x/crypto v0.1.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
 )
